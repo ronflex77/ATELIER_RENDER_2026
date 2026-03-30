@@ -12,16 +12,14 @@ provider "render" {
   owner_id = var.render_owner_id
 }
 
-
 resource "render_web_service" "flask_app" {
   name   = "flask-render-iac-${var.github_actor}"
   plan   = "free"
   region = "frankfurt"
 
-  runtime_source = {
-    docker = {
-      image_url = "${var.image_url}:${var.image_tag}"
-    }
+  # Correction pour le déploiement d'une image Docker externe
+  image_runtime_source {
+    image_url = "${var.image_url}:${var.image_tag}"
   }
 
   env_vars = {
