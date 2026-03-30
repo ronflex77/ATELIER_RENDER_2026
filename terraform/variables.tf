@@ -16,6 +16,5 @@ variable "image_tag" {
 }
 
 variable "github_actor" {
-  description = "Le nom d'utilisateur GitHub pour nommer le service"
-  type        = string
+  type = string
 }
