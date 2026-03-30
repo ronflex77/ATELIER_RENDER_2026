@@ -12,16 +12,16 @@ provider "render" {
   owner_id = var.render_owner_id
 }
 
-# 1. SERVICE DATABASE (PostgreSQL)
+# 1. DATABASE
 resource "render_postgres" "db" {
-  name             = "postgres2-${var.github_actor}"
+  name             = "postgres-${var.github_actor}"
   plan             = "free"
   region           = "frankfurt"
   database_name    = "tp_render_db"
   version          = "15"
 }
 
-# 2. SERVICE BACKEND (Flask)
+# 2. BACKEND FLASK
 resource "render_web_service" "flask_app" {
   name   = "flask-render-iac-${var.github_actor}"
   plan   = "free"
@@ -36,12 +36,11 @@ resource "render_web_service" "flask_app" {
 
   env_vars = {
     "ENV"          = { value = "production" }
-    # Utilisation de l'attribut correct pour la connexion interne
     "DATABASE_URL" = { value = render_postgres.db.connection_info.internal_connection_string }
   }
 }
 
-# 3. SERVICE ADMINER (Gestion BDD)
+# 3. ADMINER
 resource "render_web_service" "adminer" {
   name   = "adminer-${var.github_actor}"
   plan   = "free"
