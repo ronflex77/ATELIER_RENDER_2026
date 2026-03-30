@@ -79,7 +79,7 @@ jobs:
           fi
 
       - name: Wait after delete
-        run: sleep 10
+        run: sleep 30
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
