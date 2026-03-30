@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 function App() {
   const [info, setInfo] = useState(null);
-  const BACKEND_URL = "https://flask-render-iac-steeveparis-4zeu.onrender.com";
+  const BACKEND_URL = "https://flask-render-iac-ronflex77.onrender.com/";
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/info`)
