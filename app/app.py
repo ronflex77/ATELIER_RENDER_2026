@@ -1,8 +1,9 @@
-rom flask import Flask
+from flask import Flask, jsonify
 import os
 from flask_cors import CORS
 
 app = Flask(__name__)
+# Autorise ton frontend React à appeler cette API
 CORS(app)
 
 @app.route("/")
@@ -11,21 +12,21 @@ def home():
 
 @app.route("/health")
 def health():
-    return {"status": "Tout est ok ou pas"}
+    return jsonify({"status": "Tout est ok"})
 
 @app.route("/info")
 def info():
-    return {
+    return jsonify({
         "app": "Flask Render",
         "student": "lucas",
-        "version": "v1"
-    }
+        "version": "v1",
+        "env": os.getenv("ENV", "production")
+    })
 
 @app.route("/env")
 def env():
-    return {"env": os.getenv("ENV")}
+    return jsonify({"env": os.getenv("ENV", "not-set")})
 
-# Ce bloc est ignorÃ© par Gunicorn en production, mais utile en local
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
