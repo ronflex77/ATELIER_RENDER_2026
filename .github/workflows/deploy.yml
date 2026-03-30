@@ -16,12 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Clear Docker auth
-        run: |
-          unset DOCKER_AUTH_CONFIG
-          rm -f ~/.docker/config.json || true
-          mkdir -p ~/.docker
-
       - name: Login GHCR
         uses: docker/login-action@v3
         with:
@@ -43,7 +37,6 @@ jobs:
         run: |
           SERVICE_NAME="flask-render-iac-${{ github.actor }}"
           echo "SERVICE_NAME=${SERVICE_NAME}" >> $GITHUB_ENV
-          echo "Using Render service name: ${SERVICE_NAME}"
 
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
@@ -57,9 +50,6 @@ jobs:
             -H "Authorization: Bearer ${RENDER_API_KEY}" \
             https://api.render.com/v1/services)
 
-          echo "Services returned by Render:"
-          echo "$RESPONSE" | jq -r '.[] | select(.service != null) | .service.name'
-
           SERVICE_ID=$(echo "$RESPONSE" \
             | jq -r --arg NAME "$SERVICE_NAME" '
                 .[]
@@ -69,17 +59,13 @@ jobs:
               ' \
             | head -n 1)
 
-          if [ -z "$SERVICE_ID" ] || [ "$SERVICE_ID" = "null" ]; then
-            echo "No existing Render service named ${SERVICE_NAME}. Nothing to delete."
-          else
+          if [ ! -z "$SERVICE_ID" ] && [ "$SERVICE_ID" != "null" ]; then
             echo "Deleting existing Render service: ${SERVICE_NAME} (${SERVICE_ID})"
             curl -s -X DELETE \
               -H "Authorization: Bearer ${RENDER_API_KEY}" \
               "https://api.render.com/v1/services/${SERVICE_ID}"
+            sleep 30
           fi
-
-      - name: Wait after delete
-        run: sleep 30
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
