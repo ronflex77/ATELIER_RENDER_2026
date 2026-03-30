@@ -1,10 +1,8 @@
-FROM python:3.12-slim
-
+FROM python:3.11-slim
 WORKDIR /app
-
+# On pointe vers le dossier app/ de ton dépôt
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
 COPY app/ .
-
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-10000} app:app"]
+EXPOSE 10000
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
