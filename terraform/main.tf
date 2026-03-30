@@ -14,7 +14,7 @@ provider "render" {
 
 # 1. SERVICE DATABASE (PostgreSQL)
 resource "render_postgres" "db" {
-  name             = "postgres-${var.github_actor}"
+  name             = "postgre-${var.github_actor}"
   plan             = "free"
   region           = "frankfurt"
   database_name    = "tp_render_db"
