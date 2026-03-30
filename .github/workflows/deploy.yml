@@ -93,7 +93,7 @@ jobs:
           terraform apply -auto-approve \
             -var="render_api_key=${{ secrets.RENDER_API_KEY }}" \
             -var="render_owner_id=${{ secrets.RENDER_OWNER_ID }}" \
-            -var="image_url=${IMAGE_URL}" \
-            -var="image_tag=${IMAGE_TAG}" \
+            -var="image_url=${{ env.IMAGE_URL }}" \
+            -var="image_tag=${{ env.IMAGE_TAG }}" \
             -var="github_actor=${{ github.actor }}"
         working-directory: terraform
