@@ -12,18 +12,21 @@ provider "render" {
   owner_id = var.render_owner_id
 }
 
-# Rappel : Les déclarations 'variable "..." {}' doivent être 
-# uniquement dans ton fichier variables.tf pour éviter les doublons.
+# Rappel : Les variables sont déclarées dans variables.tf
+# On ne les re-déclare pas ici pour éviter l'erreur "Duplicate variable"
 
 resource "render_web_service" "flask_app" {
   name   = "flask-render-iac-${var.github_actor}"
   plan   = "free"
   region = "frankfurt"
 
-  # Cette structure est obligatoire pour les images Docker externes
+  # Correction : Séparation de image_url et tag
+  # image_url doit être : ghcr.io/ronflex77/flask-render-iac
+  # tag doit être : ${{ github.sha }}
   runtime_source = {
     image = {
-      image_url = "${var.image_url}:${var.image_tag}"
+      image_url = var.image_url
+      tag       = var.image_tag
     }
   }
 
