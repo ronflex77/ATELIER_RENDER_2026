@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 function App() {
   const [info, setInfo] = useState(null);
-  const BACKEND_URL = "https://flask-render-iac-ronflex77.onrender.com/";
+  // Remplace "ronflex77" par ton pseudo GitHub réel si besoin
+  const BACKEND_URL = "https://flask-render-iac-ronflex77.onrender.com";
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/info`)
@@ -12,16 +13,15 @@ function App() {
   }, []);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'sans-serif' }}>
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
       <h1>Atelier : React + Flask + PostgreSQL</h1>
       {info ? (
-        <div style={{ border: '2px solid green', display: 'inline-block', padding: '20px' }}>
+        <div style={{ border: '2px solid green', padding: '20px', display: 'inline-block' }}>
           <p>✅ Backend connecté !</p>
-          <p><strong>Étudiant :</strong> {info.student}</p>
-          <p><strong>Environnement :</strong> {info.env}</p>
+          <p>Étudiant : {info.student}</p>
         </div>
       ) : (
-        <p>Connexion au backend en cours...</p>
+        <p>Connexion au backend...</p>
       )}
     </div>
   );
