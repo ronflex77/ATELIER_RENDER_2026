@@ -12,6 +12,10 @@ provider "render" {
   owner_id = var.render_owner_id
 }
 
+variable "render_api_key" {}
+variable "render_owner_id" {}
+variable "image_url" {}
+variable "image_tag" {}
 variable "github_actor" {
   description = "GitHub username"
   type        = string
@@ -23,14 +27,13 @@ resource "render_web_service" "flask_app" {
   region = "frankfurt"
 
   runtime_source = {
-    image = {
-      image_url = var.image_url
-      tag       = var.image_tag
+    docker = {
+      image_url = "${var.image_url}:${var.image_tag}"
     }
   }
 
   env_vars = {
-    ENV = {
+    "ENV" = {
       value = "production"
     }
   }
